@@ -1,0 +1,5 @@
+
+msw.createStagesSpecial = function ( scene )
+{
+
+};

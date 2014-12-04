@@ -1,0 +1,5 @@
+
+msw.createStagesShip = function ( scene )
+{
+	
+};

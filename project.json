@@ -1,17 +1,29 @@
 {
-    "project_type": "javascript",
-
-    "debugMode" : 1,
-    "showFPS" : true,
-    "frameRate" : 60,
-    "id" : "gameCanvas",
-    "renderMode" : 0,
-    "engineDir":"frameworks/cocos2d-html5",
-
-    "modules" : ["cocos2d"],
-
-    "jsList" : [
-        "src/resource.js",
-        "src/app.js"
-    ]
+  "project_type": "javascript",
+  "debugMode": 1,
+  "showFPS": true,
+  "frameRate": 60,
+  "id": "gameCanvas",
+  "renderMode": 0,
+  "engineDir": "frameworks/cocos2d-html5",
+  "modules": [
+    "cocos2d"
+  ],
+  "jsList": [
+    "src/Resource.js",
+    "src/Hit.js", 
+    "src/Input.js",       
+    "src/Frame.js",    
+    "src/Object.js",
+    "src/Player.js",
+    "src/Group.js",
+    "src/GroupMgr.js",  
+    "src/Game.js",    
+    "src/StagesBullet.js",
+    "src/StagesEnemy.js",
+    "src/StagesScroll.js",
+    "src/StagesShip.js",
+    "src/StagesSpecial.js",
+    "src/StagesWeapon.js"
+  ]
 }

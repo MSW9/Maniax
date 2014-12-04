@@ -1,0 +1,5 @@
+
+msw.createStagesWeapon = function ( scene )
+{
+
+};

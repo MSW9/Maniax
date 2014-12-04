@@ -1,0 +1,5 @@
+
+msw.createStagesScroll = function ( scene )
+{
+
+};
