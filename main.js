@@ -60,7 +60,7 @@ cc.game.onStart = function ( )
     (
     	msw.Resources, 
     	function ( ) 
-    	{
+    	{    		
     		cc.director.runScene ( new msw.Game ( ) );
     	}, 
     	this

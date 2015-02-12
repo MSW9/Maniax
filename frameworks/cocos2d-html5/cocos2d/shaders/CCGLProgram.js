@@ -83,8 +83,8 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
         if (!source || !shader)
             return false;
 
-        //var preStr = (type == this._glContext.VERTEX_SHADER) ? "precision highp float;\n" : "precision mediump float;\n";
-        source = "precision highp float;        \n"
+        var preStr = cc.GLProgram._isHighpSupported() ? "precision highp float;\n" : "precision mediump float;\n";
+        source = preStr
             + "uniform mat4 CC_PMatrix;         \n"
             + "uniform mat4 CC_MVMatrix;        \n"
             + "uniform mat4 CC_MVPMatrix;       \n"
@@ -573,6 +573,9 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
     },
 
     _setUniformsForBuiltinsForRenderer: function (node) {
+        if(!node || !node._renderCmd)
+            return;
+
         var matrixP = new cc.kmMat4();
         //var matrixMV = new cc.kmMat4();
         var matrixMVP = new cc.kmMat4();
@@ -580,10 +583,10 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
         cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, matrixP);
         //cc.kmGLGetMatrix(cc.KM_GL_MODELVIEW, node._stackMatrix);
 
-        cc.kmMat4Multiply(matrixMVP, matrixP, node._stackMatrix);
+        cc.kmMat4Multiply(matrixMVP, matrixP, node._renderCmd._stackMatrix);
 
         this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_PMATRIX], matrixP.mat, 1);
-        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX], node._stackMatrix.mat, 1);
+        this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVMATRIX], node._renderCmd._stackMatrix.mat, 1);
         this.setUniformLocationWithMatrix4fv(this._uniforms[cc.UNIFORM_MVPMATRIX], matrixMVP.mat, 1);
 
         if (this._usesTime) {
@@ -726,6 +729,17 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
  */
 cc.GLProgram.create = function (vShaderFileName, fShaderFileName) {
     return new cc.GLProgram(vShaderFileName, fShaderFileName);
+};
+
+cc.GLProgram._highpSupported = null;
+
+cc.GLProgram._isHighpSupported = function(){
+    if(cc.GLProgram._highpSupported == null){
+        var ctx = cc._renderContext;
+        var highp = ctx.getShaderPrecisionFormat(ctx.FRAGMENT_SHADER, ctx.HIGH_FLOAT);
+        cc.GLProgram._highpSupported = highp.precision != 0;
+    }
+    return cc.GLProgram._highpSupported;
 };
 
 /**

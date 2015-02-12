@@ -215,12 +215,12 @@ cc.MenuItem.create = function (callback, target) {
  *
  * @property {String}   string          - Content string of label item
  * @property {cc.Node}  label           - Label of label item
- * @property {cc.Color} disabledColor   - Color of label when it's diabled
+ * @property {cc.Color} disabledColor   - Color of label when it's disabled
  */
 cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
     _disabledColor: null,
     _label: null,
-    _orginalScale: 0,
+    _originalScale: 0,
     _colorBackup: null,
 
     /**
@@ -233,7 +233,6 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
         cc.MenuItem.prototype.ctor.call(this, selector, target);
         this._disabledColor = null;
         this._label = null;
-        this._orginalScale = 0;
         this._colorBackup = null;
 
         if (label) {
@@ -740,9 +739,9 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
             } else if (four !== undefined && cc.isFunction(three)) {
                 target = four;
                 callback = three;
-                disabledImage = new cc.Sprite(selectedSprite);
+                disabledImage = new cc.Sprite(selectedSprite.getTexture(), selectedSprite.getTextureRect());
             } else if (three === undefined) {
-                disabledImage = new cc.Sprite(selectedSprite);
+                disabledImage = new cc.Sprite(selectedSprite.getTexture(), selectedSprite.getTextureRect());
             }
             this.initWithNormalSprite(normalSprite, selectedSprite, disabledImage, callback, target);
         }
@@ -1370,12 +1369,21 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
     },
 
     /**
-     * returns the selected item
+     * returns the selected item   (deprecated in -x, please use getSelectedItem instead.)
      * @return {cc.MenuItem}
      */
     selectedItem: function () {
         return this.subItems[this._selectedIndex];
     },
+
+    /**
+     * returns the selected item.
+     * @return {cc.MenuItem}
+     */
+    getSelectedItem: function() {
+        return this.subItems[this._selectedIndex];
+    },
+
     /**
      * * <p>
      *     Event callback that is invoked every time when cc.MenuItemToggle enters the 'stage'.                                   <br/>

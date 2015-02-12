@@ -99,7 +99,7 @@ _p._ctor = function(fileName, rect) {
 
 _p = cc.SpriteBatchNode.prototype;
 _p._ctor = function(fileImage, capacity) {
-    capacity = capacity || cc.DEFAULT_SPRITE_BATCH_CAPACITY;
+    capacity = capacity || cc.SpriteBatchNode.DEFAULT_CAPACITY;
     if (typeof(fileImage) == "string")
         this.initWithFile(fileImage, capacity);
     else
@@ -316,34 +316,6 @@ cc.ParticleFire.prototype._ctor  = cc.ParticleFireworks.prototype._ctor
                                             this.init();
                                       };
 
-/************************  PhysicsSprite  *************************/
-_p = cc.PhysicsSprite.prototype;
-_p._ctor = function(fileName, rect){
-    if (fileName === undefined) {
-        cc.PhysicsSprite.prototype.init.call(this);
-    }else if (typeof(fileName) === "string") {
-        if (fileName[0] === "#") {
-            //init with a sprite frame name
-            var frameName = fileName.substr(1, fileName.length - 1);
-            var spriteFrame = cc.spriteFrameCache.getSpriteFrame(frameName);
-            this.initWithSpriteFrame(spriteFrame);
-        } else {
-            //init  with filename and rect
-            if(rect)
-                this.initWithFile(fileName, rect);
-            else
-                this.initWithFile(fileName);
-        }
-    }else if (typeof(fileName) === "object") {
-        if (fileName instanceof cc.Texture2D) {
-            //init  with texture and rect
-           this.initWithTexture(fileName, rect);
-        } else if (fileName instanceof cc.SpriteFrame) {
-            //init with a sprite frame
-            this.initWithSpriteFrame(fileName);
-        }
-    }
-};
 
 /************************  ProgressTimer  *************************/
 _p = cc.ProgressTimer.prototype;
@@ -763,6 +735,10 @@ cc.Animation.prototype._ctor = function(frames, delay, loops) {
     }
 };
 
+cc.AnimationFrame.prototype._ctor = function(spriteFrame, delayUnits, userInfo) {
+    delayUnits !== undefined && this.initWithSpriteFrame(spriteFrame, delayUnits, userInfo);
+};
+
 
 /************************  Nodes  *************************/
 
@@ -903,47 +879,6 @@ cc.Sprite.create = function (fileName, rect) {
     
     return null;
 };
-
-cc.PhysicsSprite._create = cc.PhysicsSprite.create;
-cc.PhysicsSprite.create = function (fileName, rect) {
-    var sprite;
-    
-    if (arguments.length == 0) {
-        sprite = cc.PhysicsSprite._create();
-        return sprite;
-    }
-    
-    if (typeof(fileName) === "string") {
-        if (fileName[0] === "#") {
-            //init with a sprite frame name
-            var frameName = fileName.substr(1, fileName.length - 1);
-            var spriteFrame = cc.spriteFrameCache.getSpriteFrame(frameName);
-            sprite = cc.PhysicsSprite.createWithSpriteFrame(spriteFrame);
-        } else {
-            // Create with filename and rect
-            sprite = rect ? cc.PhysicsSprite._create(fileName, rect) : cc.PhysicsSprite._create(fileName);
-        }
-        if (sprite)
-            return sprite;
-        else return null;
-    }
-    
-    if (typeof(fileName) === "object") {
-        if (fileName instanceof cc.Texture2D) {
-            //init  with texture and rect
-            sprite = rect ? cc.PhysicsSprite.createWithTexture(fileName, rect) : cc.PhysicsSprite.createWithTexture(fileName);
-        } else if (fileName instanceof cc.SpriteFrame) {
-            //init with a sprite frame
-            sprite = cc.PhysicsSprite.createWithSpriteFrame(fileName)
-        }
-        if (sprite)
-            return  sprite;
-        else return null;
-    }
-    
-    return null;
-};
-
 
 cc.LabelTTF._create = cc.LabelTTF.create;
 /**
